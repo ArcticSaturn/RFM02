@@ -29,8 +29,7 @@ public:
 //private:
 	void writeRegister(uint8_t HighByte, uint8_t LowByte);
 	void configureDeviceSettings();
-	void CarrierOff();
-	void CarrierOn();
+	void SendDataSPI(uint8_t data);
 	
 	/*
 	uint8_t _channel;

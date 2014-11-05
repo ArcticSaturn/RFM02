@@ -82,7 +82,6 @@ void RFM02::writeRegister(uint8_t HighByte, uint8_t LowByte) {
 
 
 void RFM02::configureDeviceSettings() {
-	//digitalWrite(_pinChipSelect,LOW);
 	writeRegister(0xCC,0x00);	// read status
 	writeRegister(0x90,0x8A);	// 868MHz Band +/- 90kHz Bandbreite
 	writeRegister(0xA6,0x86);	// 868 MHz
@@ -91,10 +90,28 @@ void RFM02::configureDeviceSettings() {
 	writeRegister(0xC2,0x20);	// Bit Sync active
 	writeRegister(0xB0,0x00);	// 0dBm output power
 	writeRegister(0xC0,0x01);	// disable TX
-	//digitalWrite(_pinChipSelect,HIGH);
 	
-	
-	Serial.println("2");
+}
 
+/*
+void SendDataSPI(uint8_t data){
+	digitalWrite(_pinChipSelect,LOW);
+	SPI.transfer(0xC6);
+	SPI.transfer(LowByte);
+	digitalWrite(_pinChipSelect,HIGH);
 
+	 while(i){  // any no of bit's will do, also 9 or 121
+        i=i-1;
+          
+        SDI_low();                  // already set SDI-Port '0' again for next loop or
+        if( data & BIT7 )          // now nIRQ is just been low, if MSB is '1'
+            SDI_high();               // set SDI-Port '1' 
+
+        while(!(IN_PORT_REG & nIRQ));  // wait for the next high-pulse, data is read by 
+        while(IN_PORT_REG & nIRQ);     // now, wait for the falling edge
+
+        data <<= 1;          // shift left ( next bit as most significant bit ...)
+
+      } // end while(...)
+*/
 }

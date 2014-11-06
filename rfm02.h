@@ -29,7 +29,7 @@ public:
 //private:
 	void writeRegister(uint8_t HighByte, uint8_t LowByte);
 	void configureDeviceSettings();
-	void SendDataSPI(uint8_t data);
+	void RFM02_TX_DataByte_FSK(uint8_t DataByte);
 	
 	/*
 	uint8_t _channel;

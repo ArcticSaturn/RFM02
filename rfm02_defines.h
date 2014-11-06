@@ -6,6 +6,13 @@
  *  Last changed: 18.09.2014
  *
  *      Author: joeder
+ * 
+ *
+ * 06.11.2014, ArcticSaturn
+ * - added  Frequency Deviation Control Bits defines
+ * - renamed several name to shorten them
+ *
+ *
  */
 
 
@@ -19,7 +26,7 @@
 /******************************************************************************/
 /*    RF-Config-Register  Initvalue: 8080hex -> For 430MHz-Band , b1(0) b0(1) */
 /*                                                                            */
-/*    Bits:  15  14  13  12  11  10   9   8   7   6   5   4   3   2   1   0   */
+/*    Bits:  15  14  13  12  11  10   9   8   7   6   5   4   3   2   1   0    /
 /*            1   0   0  b1  b0  d2  d1  d0  x3  x2  x1  x0  ms  m2  m1  m0   */
 /*                                                                            */
 /*    default 1   0   0   0   1   0   0   0   1   0   0   0   0   0   0   0   */
@@ -42,10 +49,18 @@
 /*                                  0   0   0   0   8.5 pF                    */
 /*                                  0   0   0   1   9.0 pF                    */
 /*                                  0   0   1   0   9.5 pF                    */
-/*                                  0   0   1   1   10  pF                    */
-/*                                  .   .   .   .                             */
-/*                                  .   .   .   .   12.5 pF    *              */
-/*                                  .   .   .   .                             */
+/*                                  0   0   1   1   10.0 pF                   */
+/*                                  0   1   0   0   10.5 pF                   */
+/*                                  0   1   0   1   11.0 pF                   */
+/*                                  0   1   1   0   11.5 pF                   */
+/*                                  0   1   1   1   12.0 pF                   */
+/*                                  1   0   0   0   12.5 pF                   */
+/*                                  1   0   0   1   13.0 pF                   */
+/*                                  1   0   1   0   13.5 pF                   */
+/*                                  1   0   1   1   14.0 pF                   */
+/*                                  1   1   0   0   14.5 pF                   */
+/*                                  1   1   0   1   15.0 pF                   */
+/*                                  1   1   1   0   15.5 pF                   */
 /*                                  1   1   1   1   16.0 pF                   */
 /*                                                                            */
 /*    Frequency of Pin CLK:        d2  d1  d0   value                         */
@@ -71,53 +86,65 @@
 // set:  433MHz, Deviation 90kHz default: CLK 1MHz, Cap 12.0pF, Modularity +180°
 //#define mrc_QuickSet_RFM02_TX()     CONFIG_CMD|=FREQ_DEV_90kHz+BAND_SELECT_433MHz
 
-#define CONFIG_CMD          0x8000
+#define CONFIG_CMD             (0x8080)			 // reset value for Config command
+
+/* Frequency Deviation Control Bits */
+#define FREQ_DEV0              (0x0001)       // Frequency Deviation Control Bit: 0 
+#define FREQ_DEV1              (0x0002)       // Frequency Deviation Control Bit: 1
+#define FREQ_DEV2              (0x0004)       // Frequency Deviation Control Bit: 2
+#define MODPL0                 (0x0008)       // Modulation Polarity Bit: 0
+#define LOADCAP0               (0x0010)       // Crystal Load Cap Bit: 0
+#define LOADCAP1               (0x0020)       // Crystal Load Cap Bit: 1
+#define LOADCAP2               (0x0040)       // Crystal Load Cap Bit: 2
+#define LOADCAP3               (0x0080)       // Crystal Load Cap Bit: 3
+#define CLKFREQ0               (0x0100)       // CLK frequency Bit: 0
+#define CLKFREQ1               (0x0200)       // CLK frequency Bit: 1
+#define CLKFREQ2               (0x0400)       // CLK frequency Bit: 2
+#define FREQBAND0              (0x0800)       // Frequency Band Bit: 0
+#define FREQBAND1              (0x1000)       // Frequency Band Bit: 1
 
 /*    Frequency Deviation [kHz]:  m2  m1  m0   value                          */
-#define FREQ_DEV_30kHz      0x00       // 0 0 0 0 0 0 0 0
-#define FREQ_DEV_60kHz      0x01
-#define FREQ_DEV_90kHz      0x02
-#define FREQ_DEV_120kHz     0x03
-#define FREQ_DEV_150kHz     0x04
-#define FREQ_DEV_180kHz     0x05
-#define FREQ_DEV_210kHz     0x06       // 0 0 0 0 0 1 1 0
+#define FREQ_DEV_30kHz         (0*0x0001u)    // Frequency Deviation: 30 kHz
+#define FREQ_DEV_60kHz         (1*0x0001u)    // Frequency Deviation: 60 kHz      
+#define FREQ_DEV_90kHz         (2*0x0001u)    // Frequency Deviation: 90 kHz
+#define FREQ_DEV_120kHz        (3*0x0001u)    // Frequency Deviation: 120 kHz
+#define FREQ_DEV_150kHz        (4*0x0001u)    // Frequency Deviation: 150 kHz
+#define FREQ_DEV_180kHz        (5*0x0001u)    // Frequency Deviation: 180 kHz
+#define FREQ_DEV_210kHz        (6*0x0001u)    // Frequency Deviation: 210 kHz
 
-/*    Modulation Polarity:         ms  value                                  */
-#define MOD_POLTY_180_NEG          0x08  // 0 0 0 0 1 0 0 0
-#define MOD_POLTY_180_POS          0x00
 
 /*    Crystal Load Capacity:       x3  x2  x1  x0   value                     */
-#define CRYSTAL_LD_CAP_08_5PF       0x00            // 8,5pF
-#define CRYSTAL_LD_CAP_09_0PF       0x10            // ...
-#define CRYSTAL_LD_CAP_09_5PF       0x20
-#define CRYSTAL_LD_CAP_10_0PF       0x30
-#define CRYSTAL_LD_CAP_10_5PF       0x40
-#define CRYSTAL_LD_CAP_11_0PF       0x50
-#define CRYSTAL_LD_CAP_11_5PF       0x60
-#define CRYSTAL_LD_CAP_12_0PF       0x70
-#define CRYSTAL_LD_CAP_12_5PF       0x80
-#define CRYSTAL_LD_CAP_13_0PF       0x90
-#define CRYSTAL_LD_CAP_13_5PF       0xA0
-#define CRYSTAL_LD_CAP_14_0PF       0xB0
-#define CRYSTAL_LD_CAP_14_5PF       0xC0
-#define CRYSTAL_LD_CAP_15_0PF       0xD0
-#define CRYSTAL_LD_CAP_15_5PF       0xE0
-#define CRYSTAL_LD_CAP_16_0PF       0xF0
+#define CRYSTAL_LD_CAP_08_5PF  0x0000         // 8,5pF
+#define CRYSTAL_LD_CAP_09_0PF  0x0010         // ...
+#define CRYSTAL_LD_CAP_09_5PF  0x0020
+#define CRYSTAL_LD_CAP_10_0PF  0x0030
+#define CRYSTAL_LD_CAP_10_5PF  0x0040
+#define CRYSTAL_LD_CAP_11_0PF  0x0050
+#define CRYSTAL_LD_CAP_11_5PF  0x0060
+#define CRYSTAL_LD_CAP_12_0PF  0x0070
+#define CRYSTAL_LD_CAP_12_5PF  0x0080
+#define CRYSTAL_LD_CAP_13_0PF  0x0090
+#define CRYSTAL_LD_CAP_13_5PF  0x00A0
+#define CRYSTAL_LD_CAP_14_0PF  0x00B0
+#define CRYSTAL_LD_CAP_14_5PF  0x00C0
+#define CRYSTAL_LD_CAP_15_0PF  0x00D0
+#define CRYSTAL_LD_CAP_15_5PF  0x00E0
+#define CRYSTAL_LD_CAP_16_0PF  0x00F0
 
 /*    Frequency of Pin CLK:      d2  d1  d0   value                         */
-#define CLK_PIN_FREQ_1_00MHZ        0x0000      // 0 0 0 0 0 0 0 0
-#define CLK_PIN_FREQ_1_25MHZ        0x0100
-#define CLK_PIN_FREQ_1_66MHZ        0x0200      // ...
-#define CLK_PIN_FREQ_2_00MHZ        0x0300
-#define CLK_PIN_FREQ_2_50MHZ        0x0400
-#define CLK_PIN_FREQ_3_33MHZ        0x0500
-#define CLK_PIN_FREQ_5_00MHZ        0x0600
-#define CLK_PIN_FREQ_10_00MHZ       0x0700     // 0 0 0 0 0 1 1 1 0 0 0 0 0 0 0 0
+#define CLK_PIN_FREQ_1_00MHZ   0x0000      
+#define CLK_PIN_FREQ_1_25MHZ   0x0100
+#define CLK_PIN_FREQ_1_66MHZ   0x0200      
+#define CLK_PIN_FREQ_2_00MHZ   0x0300
+#define CLK_PIN_FREQ_2_50MHZ   0x0400
+#define CLK_PIN_FREQ_3_33MHZ   0x0500
+#define CLK_PIN_FREQ_5_00MHZ   0x0600
+#define CLK_PIN_FREQ_10_00MHZ  0x0700
 
 /*    Band Selection:               b1  b0    value ...                        */
-#define BAND_SELECT_433MHz          0x0800
-#define BAND_SELECT_868MHz          0x1000
-#define BAND_SELECT_915MHz          0x1800
+#define BAND_SELECT_433MHz     0x0800
+#define BAND_SELECT_868MHz     0x1000
+#define BAND_SELECT_915MHz     0x1800
 
 
 
@@ -135,6 +162,8 @@
 /*                                                                            */
 /*     value ranges from 0x0060..0x0F3F                                       */
 /*                                                                            */
+/*     f = carrier frequency                                                  */
+/*                                                                            */
 /*     f = 10MHz * C1 * (C2 + F/4000)      default: 435 MHz                   */
 /*                                                                            */
 /*                                                                            */
@@ -143,12 +172,14 @@
 // Nothing to do ! leave at 435 MHz
 
 // Value for frequency must be calculated for the define
-// Value for 439.7575 MHz
-#define RF_FRQUENCY_439_7575_MHZ  0x0F3F   // max value
+#define FREQ_430_2400_MHZ      0x0060  // min. value
+#define FREQ_435_0000_MHZ      0x07D0   // default
+#define FREQ_439_7575_MHZ      0x0F3F   // max value
 
-#define RF_FRQUENCY_435_0000_MHZ  0x07D0   // default
+#define FREQ_860_4800_MHZ      0x0060  // min. value
+#define FREQ_868_0000_MHZ      0x0640  // 868.00MHz value
+#define FREQ_879_5150_MHZ      0x0F3F  // max. value
 
-#define RF_FRQUENCY_430_2400_MHZ  0x0060  // min. value
 
 /******************************************************************************/
 /*    Baudrate-Adjust-Register  Initvalue:   C800hex                          */
@@ -166,15 +197,14 @@
 /******************************************************************************/
 #define CONFIG_BAUD_RATE_CMD           0xC800
 
-#define mcr_QuickSet_BaudRate_9600()    BAND_SELECT_433MHz|=BAUD_RATE_09_600_BPS
 // Value for baud rate must be calculated for the define
 // Value for 38.400 bps  is 7.97988  --> 8
 
-#define BAUD_RATE_115_000_BPS 0x02
-#define BAUD_RATE_38_400_BPS  0x08
-#define BAUD_RATE_19_200_BPS  0x11
-#define BAUD_RATE_09_600_BPS  0x23  
-#define BAUD_RATE_04_800_BPS  0x47
+#define BR_115_000_BPS         0x0002
+#define BR_38_400_BPS          0x0008
+#define BR_19_200_BPS          0x0011
+#define BR_09_600_BPS          0x0023  
+#define BR_04_800_BPS          0x0047
 
 
 /******************************************************************************/

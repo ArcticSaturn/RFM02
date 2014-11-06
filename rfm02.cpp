@@ -93,13 +93,48 @@ void RFM02::configureDeviceSettings() {
 	
 }
 
+// Data via FSK
+/******************************************************************************/
+/*         Sending data via the FSK-Pin as Input-Pin                          */
+/*                                                                            */                
+/*         After the PowerAmplifier has turned on ( ea=1 ) from rfm02-module  */
+/*         comes a clock corresponding to the data-rate set before on nIRQ.   */
+/*         The data to be transmitted is bitwise set on the FSK-Pin of the    */
+/*         module, after the falling edge of nIRQ. With the following edge    */
+/*         of nIRQ this bit is read in and sent out.                          */
+/*         nSEL must be high, SCK low, both all the time                      */
+/*                                                                            */                
+/*                                                                            */                
+/* TESTED: 28.09.2014 with Deviation +/- 90kHz and 435.000 MHz                */                
+/*                  up to 115.000BPS                                          */                
+/*                                                                            */                
+/* Support & Copyright: tigarus.programming@web.de                            */                
+/******************************************************************************/
+void RFM02_TX_DataByte_FSK(uint8_t DataByte){
+uint8_t i=8;
+// PowerAmplifier is here already enabled, impulses on nIRQ corresponding to the 
+// set data-rate, nSEL is high, SCK is low
+
+      while(i){            // do 8 times..., (any number of bit's will do, also 9 or 121)
+        i=i-1;
+		digitalWrite(_pinFSK, LOW); //OUT_PORT_REG &= ~FSK; // first set Bitx as '0'
+        if( DataByte & BIT7 )   // if not '0' write over with '1' 
+			//OUT_PORT_REG |= FSK;  // ...write '1' if most significant bit is '1'
+			digitalWrite(_pinFSK, HIGH); // ...write '1' if most significant bit is '1'
+        //while(!(IN_PORT_REG & nIRQ));  // wait for the 0-1-edge of nIRQ, reading in the data
+        //while(IN_PORT_REG & nIRQ);    // wait for 1-0-edge to send the last bit
+		while(!(digitalRead(_pinNIRQ))); // wait for the 0-1-edge of nIRQ, reading in the data
+		while((digitalRead(_pinNIRQ)));  // wait for the 0-1-edge of nIRQ, reading in the data
+		
+        DataByte <<= 1;         // shift DataByte one bit left to write the next bit
+      }
+}
+
 /*
 void SendDataSPI(uint8_t data){
 	digitalWrite(_pinChipSelect,LOW);
 	SPI.transfer(0xC6);
-	SPI.transfer(LowByte);
-	digitalWrite(_pinChipSelect,HIGH);
-
+	
 	 while(i){  // any no of bit's will do, also 9 or 121
         i=i-1;
           
@@ -113,5 +148,6 @@ void SendDataSPI(uint8_t data){
         data <<= 1;          // shift left ( next bit as most significant bit ...)
 
       } // end while(...)
+   digitalWrite(_pinChipSelect,HIGH);
 */
 }

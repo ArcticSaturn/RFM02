@@ -110,7 +110,7 @@ void RFM02::configureDeviceSettings() {
 /*                                                                            */                
 /* Support & Copyright: tigarus.programming@web.de                            */                
 /******************************************************************************/
-void RFM02_TX_DataByte_FSK(uint8_t DataByte){
+void RFM02::RFM02_TX_DataByte_FSK(uint8_t DataByte){
 uint8_t i=8;
 // PowerAmplifier is here already enabled, impulses on nIRQ corresponding to the 
 // set data-rate, nSEL is high, SCK is low
@@ -150,4 +150,3 @@ void SendDataSPI(uint8_t data){
       } // end while(...)
    digitalWrite(_pinChipSelect,HIGH);
 */
-}

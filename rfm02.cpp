@@ -52,7 +52,7 @@ void RFM02::begin() {
 	digitalWrite(_pinChipSelect, HIGH);
 	pinMode(_pinChipSelect, OUTPUT);
     
-	digitalWrite(_pinFSK, HIGH);
+	digitalWrite(_pinFSK, LOW);
 	pinMode(_pinFSK, OUTPUT);
     
 	pinMode(P_NIRQ, INPUT);
@@ -85,8 +85,8 @@ void RFM02::configureDeviceSettings() {
 	writeRegister(0xCC,0x00);	// read status
 	writeRegister(0x93,0x62);	// 868MHz Band +/- 90kHz Bandbreite
 	writeRegister(0xA6,0x86);	// 868.35 MHz
-	//writeRegister(0xD0,0x40);	// RATE/2
-	writeRegister(0xC8,0x11);	// 4.8kbps
+	writeRegister(0xD0,0x40);	// RATE/2
+	writeRegister(0xC8,0x23);	// 4.8kbps
 	writeRegister(0xC2,0x20);	// Bit Sync active
 	writeRegister(0xC0,0x01);	// disable TX
 	writeRegister(0xD2,0x40);	// PLL 25%
@@ -131,7 +131,7 @@ void RFM02::RFM02_TX_DataByte_FSK(uint8_t DataByte){
 uint8_t i=8;
 // PowerAmplifier is here already enabled, impulses on nIRQ corresponding to the 
 // set data-rate, nSEL is high, SCK is low
-
+	digitalWrite(_pinChipSelect,HIGH);	
       while(i){            // do 8 times..., (any number of bit's will do, also 9 or 121)
         i=i-1;
 		while(!(digitalRead(_pinNIRQ))); // wait for the 0-1-edge of nIRQ, reading in the data

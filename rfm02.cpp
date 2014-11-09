@@ -83,14 +83,14 @@ void RFM02::writeRegister(uint8_t HighByte, uint8_t LowByte) {
 
 void RFM02::configureDeviceSettings() {
 	writeRegister(0xCC,0x00);	// read status
-	writeRegister(0x93,0x62);	// 868MHz Band +/- 90kHz Bandbreite
+	writeRegister(0x93,0x82);	// 868MHz Band +/- 90kHz Bandbreite
 	writeRegister(0xA6,0x86);	// 868.35 MHz
 	writeRegister(0xD0,0x40);	// RATE/2
 	writeRegister(0xC8,0x23);	// 4.8kbps
 	writeRegister(0xC2,0x20);	// Bit Sync active
 	writeRegister(0xC0,0x01);	// disable TX
 	writeRegister(0xD2,0x40);	// PLL 25%
-	writeRegister(0xB3,0x00);	// -9 db
+	writeRegister(0xB0,0x00);	// -9 db
 	writeRegister(0xE0,0x00);	// 'disable wakeup timer
 	/*
 	writeRegister(0xCC,0x00);	// read status

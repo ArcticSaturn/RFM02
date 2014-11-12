@@ -35,41 +35,21 @@ RFM02::RFM02(uint8_t pinChipSelect, uint8_t pinFSK, uint8_t pinNIRQ){
 	_pinNIRQ = pinNIRQ;
 }
 
-
-/*
-RFM02::RFM02(uint8_t deviceAddress) {
-	RFM02(deviceAddress, CHANNEL);
-}
-RFM02::RFM02(uint8_t deviceAddress, uint8_t channel) {
-	_deviceAddress = deviceAddress;
-	_channel = channel;
-	_gdo0 = GDO0;	
-}
-
-*/
-
 void RFM02::begin() {
-	digitalWrite(_pinChipSelect, HIGH);
-	pinMode(_pinChipSelect, OUTPUT);
+	digitalWrite(_pinChipSelect, HIGH);  // set chip select high
+	pinMode(_pinChipSelect, OUTPUT);     // set chip select pin as output
     
-	digitalWrite(_pinFSK, LOW);
-	pinMode(_pinFSK, OUTPUT);
+	digitalWrite(_pinFSK, LOW);			// set FSK to low
+	pinMode(_pinFSK, OUTPUT);			// set FSK pin as output
     
-	pinMode(P_NIRQ, INPUT);
+	pinMode(P_NIRQ, INPUT);				// set nIRQ pin as input
 	
-	pinMode(26, OUTPUT);
-	digitalWrite(26, HIGH);
-	delay(2000);
-	digitalWrite(26, LOW);
+	configureDeviceSettings();			// configure RFM01 to correct settings	
 	
-	
-	//digitalWrite(SS,HIGH);
-	//pinMode(SS,OUTPUT);
-
-	//resetDevice();
-	
-	configureDeviceSettings();
-	//execStrobeCommand(RFM02_CMD_SRX);
+	pinMode(RED_LED, OUTPUT);			// set pin with red led as output
+	digitalWrite(RED_LED, HIGH);		// blink red led 50 ms to indicate setup ready
+	delay(50);
+	digitalWrite(RED_LED, LOW);
 }
 
 void RFM02::writeRegister(uint8_t HighByte, uint8_t LowByte) {
@@ -92,22 +72,7 @@ void RFM02::configureDeviceSettings() {
 	writeRegister(0xD2,0x40);	// PLL 25%
 	writeRegister(0xB0,0x00);	// -9 db
 	writeRegister(0xE0,0x00);	// 'disable wakeup timer
-	/*
-	writeRegister(0xCC,0x00);	// read status
-	writeRegister(0x90,0x82);	// 868MHz Band +/- 90kHz Bandbreite
-	writeRegister(0xA6,0x86);	// 868.35 MHz
-	//writeRegister(0xD0,0x40);	// RATE/2
-	writeRegister(0xC8,0x47);	// 4.8kbps
-	writeRegister(0xC2,0x20);	// Bit Sync active
-	writeRegister(0xB3,0x00);	// 0dBm output power
-	writeRegister(0xC0,0x01);	// disable TX
-	*/
-	digitalWrite(26, HIGH);
-	delay(100);
-	digitalWrite(26, LOW);
-	digitalWrite(26, HIGH);
-	delay(100);
-	digitalWrite(26, LOW);
+	
 }
 
 // Data via FSK
@@ -147,23 +112,3 @@ uint8_t i=8;
       }
 }
 
-/*
-void SendDataSPI(uint8_t data){
-	digitalWrite(_pinChipSelect,LOW);
-	SPI.transfer(0xC6);
-	
-	 while(i){  // any no of bit's will do, also 9 or 121
-        i=i-1;
-          
-        SDI_low();                  // already set SDI-Port '0' again for next loop or
-        if( data & BIT7 )          // now nIRQ is just been low, if MSB is '1'
-            SDI_high();               // set SDI-Port '1' 
-
-        while(!(IN_PORT_REG & nIRQ));  // wait for the next high-pulse, data is read by 
-        while(IN_PORT_REG & nIRQ);     // now, wait for the falling edge
-
-        data <<= 1;          // shift left ( next bit as most significant bit ...)
-
-      } // end while(...)
-   digitalWrite(_pinChipSelect,HIGH);
-*/

@@ -112,3 +112,44 @@ uint8_t i=8;
       }
 }
 
+
+void RFM02::sendMessage(uint8_t *txData, uint8_t size)
+{
+
+   //digitalWrite(_pinChipSelect, LOW); // CS LOW
+   writeRegister(0xC0,0x39); // enable TX
+   //digitalWrite(_pinChipSelect, HIGH); // CS HIGH
+   //delay(1000);
+   RFM02_TX_DataByte_FSK(0xAA); // preamble
+   RFM02_TX_DataByte_FSK(0xAA); // preamble
+   RFM02_TX_DataByte_FSK(0xAA); // preamble
+   
+   RFM02_TX_DataByte_FSK(0x2D); // sync word high
+   RFM02_TX_DataByte_FSK(0xD4); // sync word low
+   
+   for(int myLoop=0;myLoop<MESSAGELENGTH;myLoop++)
+ {
+   RFM02_TX_DataByte_FSK(txData[myLoop]); // sync word lowtxData[myLoop] = myLoop;
+ }
+   
+   /*
+   RFM02_TX_DataByte_FSK('H'); // data
+   RFM02_TX_DataByte_FSK('E'); // data
+   RFM02_TX_DataByte_FSK('L'); // data
+   RFM02_TX_DataByte_FSK('L'); // data
+   RFM02_TX_DataByte_FSK('O'); // data
+   
+   RFM02_TX_DataByte_FSK(1); // data
+   RFM02_TX_DataByte_FSK(2); // data
+   RFM02_TX_DataByte_FSK(3); // data
+   RFM02_TX_DataByte_FSK(4); // data
+   
+   RFM02_TX_DataByte_FSK(0xA5); // ende zeichen
+   */
+   delay(1); // delay until carrier turn off 
+   
+   //digitalWrite(_pinChipSelect, LOW); // CS LOW
+   writeRegister(0xC0,0x01); // disable TX
+   //digitalWrite(_pinChipSelect, HIGH); // CS HIGH
+
+}

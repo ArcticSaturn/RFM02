@@ -1,6 +1,6 @@
 
 
-#include "RFM02.h"
+#include "rfm02.h"
 
 uint8_t _pinFSK;
 uint8_t _pinNIRQ;
@@ -10,13 +10,13 @@ uint8_t _pinChipSelect;
 uint8_t _pinSerialClock;
 
 // Booster Pack Pins FR5969
-    //  7 - P2.2 for SPI_CLK mode
-    // 15 - P1.6 for SPI_SIMO mode
-	// 14 - P1.7 for SPI_SOMI mode
-	//  5 - P2.5 output pin for SPI_CS
-    // 18 - P3.0 nIRQ for sending data
-    //  3 - P2.6 as FSK input data
-    // Set display's VCC and DISP pins to high
+//  7 - P2.2 for SPI_CLK mode
+// 15 - P1.6 for SPI_SIMO mode
+// 14 - P1.7 for SPI_SOMI mode
+//  5 - P2.5 output pin for SPI_CS
+// 18 - P3.0 nIRQ for sending data
+//  3 - P2.6 as FSK input data
+// Set display's VCC and DISP pins to high
 
 
 static const uint8_t P_CS   = 4;
@@ -29,25 +29,27 @@ RFM02::RFM02() {
 }
 
 // constructor with variables
-RFM02::RFM02(uint8_t pinChipSelect, uint8_t pinFSK, uint8_t pinNIRQ){
+RFM02::RFM02(uint8_t pinChipSelect, uint8_t pinFSK, uint8_t pinNIRQ)
+{
 	_pinChipSelect = pinChipSelect;
 	_pinFSK = pinFSK;
 	_pinNIRQ = pinNIRQ;
 }
 
 void RFM02::begin() {
-	digitalWrite(_pinChipSelect, HIGH);  // set chip select high
-	pinMode(_pinChipSelect, OUTPUT);     // set chip select pin as output
+	digitalWrite(_pinChipSelect, HIGH);  	// set chip select high
+	pinMode(_pinChipSelect, OUTPUT);     	// set chip select as output
     
-	digitalWrite(_pinFSK, LOW);			// set FSK to low
-	pinMode(_pinFSK, OUTPUT);			// set FSK pin as output
+	digitalWrite(_pinFSK, LOW);		// set FSK to low
+	pinMode(_pinFSK, OUTPUT);		// set FSK pin as output
     
-	pinMode(P_NIRQ, INPUT);				// set nIRQ pin as input
+	pinMode(P_NIRQ, INPUT);			// set nIRQ pin as input
 	
-	configureDeviceSettings();			// configure RFM01 to correct settings	
+	configureDeviceSettings();		// configure RFM01	
 	
-	pinMode(RED_LED, OUTPUT);			// set pin with red led as output
-	digitalWrite(RED_LED, HIGH);		// blink red led 50 ms to indicate setup ready
+	pinMode(RED_LED, OUTPUT);		// set red led as output
+	digitalWrite(RED_LED, HIGH);		// blink red led 50 ms 
+						// to indicate setup ready
 	delay(50);
 	digitalWrite(RED_LED, LOW);
 }

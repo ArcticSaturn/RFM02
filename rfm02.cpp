@@ -97,20 +97,21 @@ void RFM02::configureDeviceSettings() {
 void RFM02::RFM02_TX_DataByte_FSK(uint8_t DataByte){
 uint8_t i=8;
 // PowerAmplifier is here already enabled, impulses on nIRQ corresponding to the 
-// set data-rate, nSEL is high, SCK is low
+	// set data-rate, nSEL is high, SCK is low
 	digitalWrite(_pinChipSelect,HIGH);	
-      while(i){            // do 8 times..., (any number of bit's will do, also 9 or 121)
-        i=i-1;
-		while(!(digitalRead(_pinNIRQ))); // wait for the 0-1-edge of nIRQ, reading in the data
-		while((digitalRead(_pinNIRQ)));   // wait for 1-0-edge to send the last bit
-		
-		
-        if( DataByte & BIT7 )   // if not '0' write over with '1' 
-			digitalWrite(_pinFSK, HIGH); // ...write '1' if most significant bit is '1'
-        else 
+	while(i){            // do 8 times 
+        	i=i-1;
+		 // wait for the 0-1-edge of nIRQ, reading in the data
+		while(!(digitalRead(_pinNIRQ)));
+		// wait for 1-0-edge to send the last bit	
+		while((digitalRead(_pinNIRQ)));   
+		// if not '0' write over with '1' 
+		if( DataByte & BIT7 )  
+			digitalWrite(_pinFSK, HIGH); // write '1' if most significant bit is '1'
+        	else 
 			digitalWrite(_pinFSK, LOW); //OUT_PORT_REG &= ~FSK; // first set Bitx as '0'
-					
-        DataByte <<= 1;         // shift DataByte one bit left to write the next bit
+		// shift DataByte one bit left to write the next bit
+		DataByte <<= 1;
       }
 }
 
@@ -121,7 +122,7 @@ void RFM02::sendMessage(uint8_t *txData, uint8_t size)
    //digitalWrite(_pinChipSelect, LOW); // CS LOW
    writeRegister(0xC0,0x39); // enable TX
    //digitalWrite(_pinChipSelect, HIGH); // CS HIGH
-   //delay(1000);
+   //delay(10);
    RFM02_TX_DataByte_FSK(0xAA); // preamble
    RFM02_TX_DataByte_FSK(0xAA); // preamble
    RFM02_TX_DataByte_FSK(0xAA); // preamble
@@ -148,7 +149,10 @@ void RFM02::sendMessage(uint8_t *txData, uint8_t size)
    
    RFM02_TX_DataByte_FSK(0xA5); // ende zeichen
    */
-   delay(1); // delay until carrier turn off 
+   //delayMicroseconds(2410); // delay until carrier turn off 
+   //digitalWrite(_pinFSK, HIGH); 
+   delay(1);
+   
    
    //digitalWrite(_pinChipSelect, LOW); // CS LOW
    writeRegister(0xC0,0x01); // disable TX

@@ -68,11 +68,11 @@ void RFM02::configureDeviceSettings() {
 	writeRegister(0x93,0x82);	// 868MHz Band +/- 90kHz Bandbreite
 	writeRegister(0xA6,0x86);	// 868.35 MHz
 	writeRegister(0xD0,0x40);	// RATE/2
-	writeRegister(0xC8,0x23);	// 4.8kbps
+	writeRegister(0xC8,0x23);	// 38.4/2 = 19.2kbps
 	writeRegister(0xC2,0x20);	// Bit Sync active
 	writeRegister(0xC0,0x01);	// disable TX
 	writeRegister(0xD2,0x40);	// PLL 25%
-	writeRegister(0xB0,0x00);	// -9 db
+	writeRegister(0xB0,0x00);	// 0 db
 	writeRegister(0xE0,0x00);	// 'disable wakeup timer
 	
 }
@@ -98,6 +98,7 @@ void RFM02::RFM02_TX_DataByte_FSK(uint8_t DataByte){
 uint8_t i=8;
 // PowerAmplifier is here already enabled, impulses on nIRQ corresponding to the 
 	// set data-rate, nSEL is high, SCK is low
+	
 	digitalWrite(_pinChipSelect,HIGH);	
 	while(i){            // do 8 times 
         	i=i-1;
@@ -122,7 +123,7 @@ void RFM02::sendMessage(uint8_t *txData, uint8_t size)
    //digitalWrite(_pinChipSelect, LOW); // CS LOW
    writeRegister(0xC0,0x39); // enable TX
    //digitalWrite(_pinChipSelect, HIGH); // CS HIGH
-   //delay(10);
+   delay(2);
    RFM02_TX_DataByte_FSK(0xAA); // preamble
    RFM02_TX_DataByte_FSK(0xAA); // preamble
    RFM02_TX_DataByte_FSK(0xAA); // preamble
@@ -151,6 +152,13 @@ void RFM02::sendMessage(uint8_t *txData, uint8_t size)
    */
    //delayMicroseconds(2410); // delay until carrier turn off 
    //digitalWrite(_pinFSK, HIGH); 
+   
+   // while((digitalRead(_pinNIRQ)));
+    //while(!(digitalRead(_pinNIRQ)));
+
+    //while((digitalRead(_pinNIRQ)));
+   // while(!(digitalRead(_pinNIRQ)));
+ //__delay_cycles(1500);
    delay(1);
    
    

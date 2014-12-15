@@ -19,10 +19,15 @@ uint8_t _pinSerialClock;
 // Set display's VCC and DISP pins to high
 
 
+static const uint8_t P_CS   = 11;
+static const uint8_t P_FSK  = 9;
+static const uint8_t P_NIRQ = 10;
+
+/*
 static const uint8_t P_CS   = 4;
 static const uint8_t P_FSK  = 3;
 static const uint8_t P_NIRQ = 18;
-
+*/
 // empty constructor
 RFM02::RFM02() {
 	RFM02(P_CS, P_FSK, P_NIRQ);

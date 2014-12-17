@@ -52,11 +52,11 @@ void RFM02::begin() {
 	
 	configureDeviceSettings();		// configure RFM01	
 	
-	pinMode(RED_LED, OUTPUT);		// set red led as output
-	digitalWrite(RED_LED, HIGH);		// blink red led 50 ms 
+	//pinMode(RED_LED, OUTPUT);		// set red led as output
+	//digitalWrite(RED_LED, HIGH);		// blink red led 50 ms 
 						// to indicate setup ready
-	delay(50);
-	digitalWrite(RED_LED, LOW);
+	//delay(50);
+	//digitalWrite(RED_LED, LOW);
 }
 
 void RFM02::writeRegister(uint8_t HighByte, uint8_t LowByte) {
@@ -128,7 +128,7 @@ void RFM02::sendMessage(uint8_t *txData, uint8_t size)
    //digitalWrite(_pinChipSelect, LOW); // CS LOW
    writeRegister(0xC0,0x39); // enable TX
    //digitalWrite(_pinChipSelect, HIGH); // CS HIGH
-   delay(2);
+   delayMicroseconds(2000);
    RFM02_TX_DataByte_FSK(0xAA); // preamble
    RFM02_TX_DataByte_FSK(0xAA); // preamble
    RFM02_TX_DataByte_FSK(0xAA); // preamble
@@ -164,7 +164,7 @@ void RFM02::sendMessage(uint8_t *txData, uint8_t size)
     //while((digitalRead(_pinNIRQ)));
    // while(!(digitalRead(_pinNIRQ)));
  //__delay_cycles(1500);
-   delay(1);
+   delayMicroseconds(1000);
    
    
    //digitalWrite(_pinChipSelect, LOW); // CS LOW

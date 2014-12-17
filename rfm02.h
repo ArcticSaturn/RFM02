@@ -21,7 +21,7 @@ public:
 	void begin();
 	void sendMessage(uint8_t *txData, uint8_t size);
 	
-private:
+//private:
 	void writeRegister(uint8_t HighByte, uint8_t LowByte);
 	void configureDeviceSettings();
 	void RFM02_TX_DataByte_FSK(uint8_t DataByte);
